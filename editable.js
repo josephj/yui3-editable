@@ -100,6 +100,7 @@ YUI.add("editable", function (Y) {
      * @param {Object} config attribute object
      */
     function Editable (config) {
+        this.lang = Y.Intl.get("editable");
         Editable.superclass.constructor.apply(this, arguments);
     }
 
@@ -583,4 +584,4 @@ YUI.add("editable", function (Y) {
     // Promote to YUI environment.
     Y.Editable = Editable;
 
-}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-form", "escape", "widget-buttons"]});
+}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-base", "escape", "intl"]});

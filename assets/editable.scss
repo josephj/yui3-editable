@@ -1,0 +1,53 @@
+@import "compass";
+.yui3-editable-hint {
+    display: none;
+}
+.yui3-editable-empty .yui3-editable-hint {
+    color: #999;
+    display: block;
+}
+.yui3-editable-dialog {
+    background: #fff;
+    border: solid 1px #ccc;
+    padding: 10px;
+    position: absolute;
+    @include border-radius(5px);
+}
+// Same element with .yui3-editable-dialog
+.yui3-panel-hidden {
+    visibility: hidden;
+}
+.yui3-editable-dialog-content {
+    position: relative;
+    .yui3-button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: #099;
+        padding: 0;
+        outline: 0;
+    }
+    .yui3-button-primary {
+        background-color: #666;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-weight: bold;
+        margin-right: 5px;
+        padding: 5px 10px;
+        width: auto;
+        @include border-radius(5px);
+    }
+}
+.yui3-editable-dialog-input {
+    background: #eee;
+    border: solid 1px #ccc;
+    display: block;
+    margin: 5px auto;
+    min-width: 100px;
+    padding: 5px;
+}
+.yui3-editable-dialog-link {
+    color: #099;
+    text-decoration: none;
+}

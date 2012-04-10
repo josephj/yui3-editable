@@ -1,31 +1,33 @@
+.yui3-editable-hint {
+    display: none;
+}
+
+.yui3-editable-empty .yui3-editable-hint {
+    color: #999;
+    display: block;
+}
+
 .yui3-editable-dialog {
-    position: absolute;
     background: #fff;
-    border-radius: 5px;
     border: solid 1px #ccc;
     padding: 10px;
+    position: absolute;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -o-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
 }
-.yui3-editable-dialog .yui3-editable-dialog-content {
+
+.yui3-panel-hidden {
+    visibility: hidden;
+}
+
+.yui3-editable-dialog-content {
     position: relative;
 }
-.yui3-editable-dialog .yui3-widget-hd button {
-    position: absolute;
-    top: 0;
-    right: 0;
-}
-.yui3-editable-dialog .yui3-editable-dialog-input {
-    background: #eee;
-    border: solid 1px #ccc;
-    display: block;
-    margin: 5px auto;
-    padding: 5px;
-    min-width: 100px;
-}
-.yui3-editable-dialog .yui3-editable-dialog-link {
-    color: #099;
-    text-decoration: none;
-}
-.yui3-editable-dialog .yui3-button {
+.yui3-editable-dialog-content .yui3-button {
     border: none;
     background: none;
     cursor: pointer;
@@ -33,30 +35,33 @@
     padding: 0;
     outline: 0;
 }
-.yui3-editable-dialog .yui3-button-primary {
+.yui3-editable-dialog-content .yui3-button-primary {
     background-color: #666;
     border: none;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 5px;
+    padding: 5px 10px;
+    width: auto;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
     -o-border-radius: 5px;
     -ms-border-radius: 5px;
     -khtml-border-radius: 5px;
     border-radius: 5px;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 5px 10px;
-    width: auto;
-    margin-right: 5px;
 }
-.yui3-panel-hidden {
-    visibility: hidden;
-}
-.yui3-editable-hint {
-    display: none;
-}
-.yui3-editable-empty .yui3-editable-hint {
-    background-color: #ddd;
-    color: #999;
+
+.yui3-editable-dialog-input {
+    background: #eee;
+    border: solid 1px #ccc;
     display: block;
+    margin: 5px auto;
+    min-width: 100px;
+    padding: 5px;
+}
+
+.yui3-editable-dialog-link {
+    color: #099;
+    text-decoration: none;
 }

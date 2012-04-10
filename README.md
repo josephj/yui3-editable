@@ -74,3 +74,7 @@ YUI().use("editable", function () {
     });
 });
 
+### Sample Code
+
+* http://josephj.com/lab/2012/yui3-editable/sample/demo-simple.html
+* http://josephj.com/lab/2012/yui3-editable/sample/demo.html

@@ -10,7 +10,7 @@ You must embed YUI seed file in your web page.
 <script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
 ```
 
-## Editable JavaScript Library.
+## Editable JavaScript Library
 
 Make a copy of editable.js to your website and embed it in your web page too.
 
@@ -55,7 +55,7 @@ YUI().use("editable", function () {
 });
 ```
 
-### Interacting with Server.
+### Interacting with Server
 
 The above example only works in browser-side.
 You must want to know how to save your data to your web server.

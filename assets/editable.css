@@ -7,6 +7,10 @@
     display: block;
 }
 
+.yui3-panel-hidden {
+    visibility: hidden;
+}
+
 .yui3-editable-dialog {
     background: #fff;
     border: solid 1px #ccc;
@@ -20,8 +24,10 @@
     border-radius: 5px;
 }
 
-.yui3-panel-hidden {
-    visibility: hidden;
+.yui3-editable-dialog-message {
+    color: red;
+    padding-bottom: 3px;
+    font-size: 93%;
 }
 
 .yui3-editable-dialog-content {

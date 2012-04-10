@@ -22,6 +22,7 @@ YUI.add("editable", function (Y) {
         VALUE_CLASS_NAME   = CLASS_NAME + "-value",
         HINT_CLASS_NAME    = CLASS_NAME + "-hint",
         EMPTY_CLASS_NAME   = CLASS_NAME + "-empty",
+        MESSAGE_CLASS_NAME = CLASS_NAME + "-dialog-message",
         INPUT_SELECTOR     = "." + INPUT_CLASS_NAME,
         //==================
         // Private Function
@@ -128,6 +129,17 @@ YUI.add("editable", function (Y) {
          */
         "emptyDefault": {
             value: "Please input your text...",
+            validator: Y.Lang.isString
+        },
+        /**
+         * The error message which shows when validating fails.
+         *
+         * @attribute errorMessage
+         * @type {String}
+         * @default "Something wrong, please try again."
+         */
+        "errorMessage": {
+            value: "Something wrong, please try again.",
             validator: Y.Lang.isString
         },
         /**
@@ -298,6 +310,8 @@ YUI.add("editable", function (Y) {
                                 clickNode.removeClass(EMPTY_CLASS_NAME);
                             }
                             _panel.hide();
+                        } else {
+                            _panel.get("srcNode").one("." + MESSAGE_CLASS_NAME).setContent(self.get("errorMessage"));
                         }
                     },
                     "end": function (id, args) {
@@ -362,13 +376,15 @@ YUI.add("editable", function (Y) {
                 bodyContent = [
                     '<input type="text"' + fieldName,
                     ' class="' + INPUT_CLASS_NAME + '"',
-                    ' value="' + clickText + '">'
+                    ' value="' + clickText + '">',
+                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
                 ].join("");
             } else {
                 bodyContent = [
                     '<textarea' + fieldName,
                     ' class="' + INPUT_CLASS_NAME + '"',
-                    '>' + clickText + '</textarea>'
+                    '>' + clickText + '</textarea>',
+                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
                 ].join("");
             }
             _panel.set("bodyContent", bodyContent);

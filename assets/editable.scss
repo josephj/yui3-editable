@@ -6,6 +6,10 @@
     color: #999;
     display: block;
 }
+// Same element with .yui3-editable-dialog
+.yui3-panel-hidden {
+    visibility: hidden;
+}
 .yui3-editable-dialog {
     background: #fff;
     border: solid 1px #ccc;
@@ -13,9 +17,10 @@
     position: absolute;
     @include border-radius(5px);
 }
-// Same element with .yui3-editable-dialog
-.yui3-panel-hidden {
-    visibility: hidden;
+.yui3-editable-dialog-message {
+    color: red;
+    padding-bottom: 3px;
+    font-size: 93%;
 }
 .yui3-editable-dialog-content {
     position: relative;

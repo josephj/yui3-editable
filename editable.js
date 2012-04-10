@@ -1,21 +1,35 @@
 /*global YUI */
-// 填資料的方式
-// 速度如何更快
-// UnitTest
+// 當資料是空的時候..
+// 定位速度如何更快
+// 多國語系
 /**
  * A widget that makes a node's content editable.
  *
  * @module editable
+ * @requires base, panel, event-delegate, node-event-delegate, io-base, escape
  */
 YUI.add("editable", function (Y) {
 
     var _panel = null, // The single Y.Panel instance for all editable instances.
-        MODULE_ID = "Y.Editable",
-        CLASS_NAME = "yui3-editable",
+        //=============
+        // Constants
+        //=============
+        MODULE_ID        = "Y.Editable",
+        CLASS_NAME       = "yui3-editable",
+        CLICK_SELECTOR   = "." + CLASS_NAME,
         INPUT_CLASS_NAME = CLASS_NAME + "-dialog-input",
-        INPUT_SELECTOR = "." + INPUT_CLASS_NAME,
+        INPUT_SELECTOR   = "." + INPUT_CLASS_NAME,
+        //==================
+        // Private Function
+        //==================
         _initPanel;
 
+    /**
+     * Render global panel.
+     *
+     * @method _initPanel
+     * @private
+     */
     _initPanel = function () {
         var panel = new Y.Panel({
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
@@ -35,7 +49,13 @@ YUI.add("editable", function (Y) {
         return panel;
     };
 
-    // Constructor
+    /**
+     * A widget that makes a node's content editable.
+     *
+     * @constructor
+     * @class Editable
+     * @param {Object} config attribute object
+     */
     function Editable (config) {
         Editable.superclass.constructor.apply(this, arguments);
     }
@@ -86,16 +106,6 @@ YUI.add("editable", function (Y) {
          */
         "node": {
             value: null
-        },
-        /**
-         * A node with this class name would be editable.
-         *
-         * @attribute selector
-         * @type {String}
-         * @default ".yui3-editable"
-         */
-        "selector": {
-            value: "." + CLASS_NAME
         },
         /**
          * The query string as POST data.
@@ -206,23 +216,28 @@ YUI.add("editable", function (Y) {
         _handleSubmit: function (e) {
             Y.log("_handleSubmit(e) is executed.", "info", MODULE_ID);
             var self = this,
+                value = "",
                 url;
 
             e.preventDefault();
             url = self.get("postUrl");
+            value = self._inputNode.get("value");
 
-            if (self._activeValue === self._inputNode.get("value")) {
+            if (self._activeValue === value) {
                 Y.log("_handleSubmit(e) - Value not change.", "warn", MODULE_ID);
-                self._activeValue = "";
                 _panel.hide();
                 return;
             }
 
             // If the postUrl attribute is not defined,
             // it just copies the user input value to the editable node.
+
             if (!url) {
-                self._clickNode.setContent(Y.Escape.html(self._inputNode.get("value")));
+                self._clickNode.setContent(Y.Escape.html(value));
                 _panel.hide();
+                if (!value) {
+                    self._clickNode.addClass(CLASS_NAME + "-empty");
+                }
                 return;
             }
 
@@ -248,7 +263,10 @@ YUI.add("editable", function (Y) {
                         // and the panel will be hided.
                         if (validator(o)) {
                             Y.log("_handleSubmit(e) - Validation rule passed.");
-                            self._clickNode.setContent(Y.Escape.html(self._inputNode.get("value")));
+                            if (!value) {
+                                self._clickNode.addClass(CLASS_NAME + "-empty");
+                            }
+                            self._clickNode.setContent(Y.Escape.html(value));
                             _panel.hide();
                         }
                     },
@@ -337,7 +355,7 @@ YUI.add("editable", function (Y) {
 
             // Use event delegation to prevent too many editable node exists.
             node = Y.one(self.get("node"));
-            handler = node.delegate("click", self._handleClick, self.get("selector"), self);
+            handler = node.delegate("click", self._handleClick, CLICK_SELECTOR, self);
             self._handlers.push(handler);
         },
         /**

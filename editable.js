@@ -293,8 +293,10 @@ YUI.add("editable", function (Y) {
         _handleClick: function (e) {
             Y.log("_handleClick(e) is executed.", "info", MODULE_ID);
             var self = this,
+                bodyContent,
                 clickNode,
                 clickText,
+                fieldName,
                 panelNode,
                 inputNode;
 
@@ -417,7 +419,7 @@ YUI.add("editable", function (Y) {
                 node.append('<div class="' + VALUE_CLASS_NAME + '">' + text + '</div>');
             }
             if (!node.one("." + HINT_CLASS_NAME)) {
-                empty = this.get("emptyDefault"), // The default empty text.
+                empty = this.get("emptyDefault"); // The default empty text.
                 node.append('<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>');
             }
         },

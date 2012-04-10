@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Y.Editable Prototype</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
+<link href="../assets/editable.css" rel="stylesheet">
+<script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
+<script src="../editable.js"></script>
+<style>
+ul {
+    width: 200px;
+    background: yellow;
+}
+</style>
+</head>
+<body>
+    <ul>
+        <li>
+            <img src="https://twimg0-a.akamaihd.net/profile_images/1185442680/photo-1_normal.jpeg" alt="David's Buddy Icon">
+            <div class="nickname-editable">Killer</p>
+        </li>
+        <li>
+            <img src="https://twimg0-a.akamaihd.net/profile_images/14866392/sonic2_normal.jpg" alt="Kate's Buddy Icon">
+            <div class="nickname-editable">Katty</p>
+        </li>
+        <li>
+            <img src="https://twimg0-a.akamaihd.net/profile_images/1645332291/20060629122957908_normal.jpg" alt="John's Buddy Icon">
+            <div class="nickname-editable"></p>
+        </li>
+    </ul>
+    <script>
+    YUI({fetchCSS: false}).use("editable", function (Y) {
+        var editable = new Y.Editable({
+            "selector": ".nickname-editable"
+        });
+    });
+    </script>
+</body>
+</html>

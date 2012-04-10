@@ -39,6 +39,7 @@ YUI.add("editable", function (Y) {
         var panel = new Y.Panel({
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
             contentBox: Y.Node.create('<form class="' + CLASS_NAME + '-dialog-content"/>'),
+            constrain: "body",
             headerContent: "Edit",
             visible: false,
             render: true

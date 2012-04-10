@@ -180,9 +180,9 @@ YUI.add("editable", function (Y) {
         _uiSetPosition: function (inputNode, panelNode, clickNode) {
             var clickXY  = clickNode.getXY(),
                 dialogXY = panelNode.getXY(),
-                inputXY  = inputNode.getXY(),
-                padX,
-                padY;
+                inputXY = inputNode.getXY(),
+                padX    = 18, // TODO - padX and padY should be dynamic.
+                padY    = 15;
 
             inputNode.setStyles({
                 "width" : clickNode.get("offsetWidth"),
@@ -190,8 +190,8 @@ YUI.add("editable", function (Y) {
             });
 
             _panel.set("xy", [
-                clickXY[0] - (inputXY[0] - dialogXY[0]) - 20,
-                clickXY[1] - (inputXY[1] - dialogXY[1]) - 15
+                clickXY[0] - (inputXY[0] - dialogXY[0]) - padX,
+                clickXY[1] - (inputXY[1] - dialogXY[1]) - padY
             ]);
         },
         /**

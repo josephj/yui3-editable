@@ -1,5 +1,4 @@
 /*global YUI */
-// 當資料是空的時候..
 // 定位速度如何更快
 // 多國語系
 /**
@@ -37,6 +36,7 @@ YUI.add("editable", function (Y) {
      * @private
      */
     _initPanel = function () {
+        Y.log("_initPanel() is executed.", "info", MODULE_ID);
         var panel = new Y.Panel({
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
             contentBox: Y.Node.create('<form class="' + CLASS_NAME + '-dialog-content"/>'),
@@ -44,6 +44,14 @@ YUI.add("editable", function (Y) {
             headerContent: "Edit",
             visible: false,
             render: true
+        });
+        // FIXME - button disappear after _uiSetPosition.
+        panel.addButton({
+            value: "Close",
+            action: function () {
+                panel.hide();
+            },
+            section: Y.WidgetStdMod.HEADER
         });
         Y.one("body").on("click", _documentClick);
         return panel;
@@ -575,4 +583,4 @@ YUI.add("editable", function (Y) {
     // Promote to YUI environment.
     Y.Editable = Editable;
 
-}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-form", "escape"]});
+}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-form", "escape", "widget-buttons"]});

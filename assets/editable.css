@@ -52,3 +52,11 @@
 .yui3-panel-hidden {
     visibility: hidden;
 }
+.yui3-editable-hint {
+    display: none;
+}
+.yui3-editable-empty .yui3-editable-hint {
+    background-color: #ddd;
+    color: #999;
+    display: block;
+}

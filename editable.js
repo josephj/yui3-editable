@@ -14,14 +14,19 @@ YUI.add("editable", function (Y) {
         //=============
         // Constants
         //=============
-        MODULE_ID        = "Y.Editable",
-        CLASS_NAME       = "yui3-editable",
-        CLICK_SELECTOR   = "." + CLASS_NAME,
-        INPUT_CLASS_NAME = CLASS_NAME + "-dialog-input",
-        INPUT_SELECTOR   = "." + INPUT_CLASS_NAME,
+        MODULE_ID          = "Y.Editable",
+        CLASS_NAME         = "yui3-editable",
+        CLICK_SELECTOR     = "." + CLASS_NAME,
+        INPUT_CLASS_NAME   = CLASS_NAME + "-dialog-input",
+        CLICKED_CLASS_NAME = CLASS_NAME + "-clicked",
+        VALUE_CLASS_NAME   = CLASS_NAME + "-value",
+        HINT_CLASS_NAME    = CLASS_NAME + "-hint",
+        EMPTY_CLASS_NAME   = CLASS_NAME + "-empty",
+        INPUT_SELECTOR     = "." + INPUT_CLASS_NAME,
         //==================
         // Private Function
         //==================
+        _documentClick,
         _initPanel;
 
     /**
@@ -38,15 +43,30 @@ YUI.add("editable", function (Y) {
             visible: false,
             render: true
         });
-        Y.one("body").on("click", function (e) {
-            if (
-                !e.target.test("." + CLASS_NAME) &&
-                !_panel.get("srcNode").contains(e.target)
-            ) {
-                panel.hide();
-            }
-        }, this);
+        Y.one("body").on("click", _documentClick);
         return panel;
+    };
+    /**
+     * Hide panel when user clicks outside the panel.
+     *
+     * @event _documentClick
+     * @private
+     */
+    _documentClick = function (e) {
+        Y.log("_documentClick(e) is executed.", "info", MODULE_ID);
+        if (!_panel.get("visible")) {
+            Y.log("_documentClick(e) - Panel is not visible.", "info", MODULE_ID);
+            return;
+        }
+        if (
+            !e.target.test("." + CLASS_NAME) &&
+            !e.target.test("." + HINT_CLASS_NAME) &&
+            !e.target.test("." + VALUE_CLASS_NAME) &&
+            !_panel.get("srcNode").contains(e.target)
+        ) {
+            Y.log("_documentClick(e) - Panel is hided.", "info", MODULE_ID);
+            _panel.hide();
+        }
     };
 
     /**
@@ -96,6 +116,10 @@ YUI.add("editable", function (Y) {
                 return (value === "hover" || value === "click");
             }
 
+        },
+        "emptyDefault": {
+            value: "Please input your text...",
+            validator: Y.Lang.isString
         },
         /**
          * The form element type for user to input.
@@ -161,64 +185,23 @@ YUI.add("editable", function (Y) {
          */
         "postField": {
             value: null
+        },
+        "selector": {
+            value: null
         }
     };
 
     Y.extend(Editable, Y.Base, {
-        _handlers: [],
-        _inputNode: null,
-        _clickNode: null,
-        _activeValue: "",
-        /**
-         * Set the position for panel editor.
-         *
-         * @method _uiSetPosition
-         * @param inputNode {Y.Node} The input node.
-         * @param panelNode {Y.Node} The panel node.
-         * @param clickNode {Y.Node} The editable node.
-         */
-        _uiSetPosition: function (inputNode, panelNode, clickNode) {
-            var clickXY  = clickNode.getXY(),
-                dialogXY = panelNode.getXY(),
-                inputXY = inputNode.getXY(),
-                padX    = 18, // TODO - padX and padY should be dynamic.
-                padY    = 15;
-
-            inputNode.setStyles({
-                "width" : clickNode.get("offsetWidth"),
-                "height": clickNode.get("offsetHeight")
-            });
-
-            _panel.set("xy", [
-                clickXY[0] - (inputXY[0] - dialogXY[0]) - padX,
-                clickXY[1] - (inputXY[1] - dialogXY[1]) - padY
-            ]);
-        },
-        /**
-         * All buttons in panel footer will be disabled.
-         * It prevents duplicate form submission.
-         *
-         * @event _lock
-         * @private
-         */
-        _lock: function () {
-            var self = this;
-            Y.each(_panel.get("buttons.footer"), function (button) {
-                button.set("disabled", true);
-            });
-        },
-        /**
-         * Remove disable attribute for panel footer buttons.
-         *
-         * @event _unlock
-         * @private
-         */
-        _unlock: function () {
-            var self = this;
-            Y.each(_panel.get("buttons.footer"), function (button) {
-                button.set("disabled", false);
-            });
-        },
+        //=====================
+        // Private Attribute
+        //=====================
+        _activeValue: "", // Compare with the value user submits.
+        _clickNode: null, // The node user clicks.
+        _handlers: [],    // Event handlers which will be removed if destroy() is called.
+        _inputNode: null, // The node user inputs string.
+        //=====================
+        // Private Events
+        //=====================
         /**
          * Handle form submission.
          *
@@ -229,6 +212,7 @@ YUI.add("editable", function (Y) {
         _handleSubmit: function (e) {
             Y.log("_handleSubmit(e) is executed.", "info", MODULE_ID);
             var self = this,
+                clickNode = null,
                 value = "",
                 url;
 
@@ -244,18 +228,21 @@ YUI.add("editable", function (Y) {
 
             // If the postUrl attribute is not defined,
             // it just copies the user input value to the editable node.
-
             if (!url) {
-                self._clickNode.setContent(Y.Escape.html(value));
-                _panel.hide();
+                value = Y.Escape.html(value);
+                clickNode = self._clickNode;
+                clickNode.one("." + VALUE_CLASS_NAME).setContent(value);
                 if (!value) {
-                    self._clickNode.addClass(CLASS_NAME + "-empty");
+                    clickNode.addClass(EMPTY_CLASS_NAME);
+                } else {
+                    clickNode.removeClass(EMPTY_CLASS_NAME);
                 }
+                _panel.hide();
                 return;
             }
 
             // Otherwise, it uses Y.io() to communicate with server.
-            Y.log("_handleSubmit(e) - Exchange data with server.");
+            Y.log("_handleSubmit(e) - Exchange data with server.", "info", MODULE_ID);
             Y.io(url, {
                 method: "POST",
                 data: self.get("postData"),
@@ -265,21 +252,27 @@ YUI.add("editable", function (Y) {
                         this._lock();
                     },
                     "success": function (id, o, args) {
-                        Y.log("_handleSubmit(e) - Server responses data successfully.");
+                        Y.log("_handleSubmit(e) - Server responses data successfully.", "info", MODULE_ID);
                         var self = this,
-                            validator;
+                            validator,
+                            clickNode;
 
                         validator = self.get("postValidator");
+                        clickNode = self._clickNode;
 
                         // After passing user defined validator,
                         // The editable node's content will be updated,
                         // and the panel will be hided.
                         if (validator(o)) {
-                            Y.log("_handleSubmit(e) - Validation rule passed.");
+                            Y.log("_handleSubmit(e) - Validation rule passed.", "info", MODULE_ID);
+                            value = Y.Escape.html(value);
+                            value = Y.Lang.trim(value);
+                            clickNode.one("." + VALUE_CLASS_NAME).setContent(value);
                             if (!value) {
-                                self._clickNode.addClass(CLASS_NAME + "-empty");
+                                clickNode.addClass(EMPTY_CLASS_NAME);
+                            } else {
+                                clickNode.removeClass(EMPTY_CLASS_NAME);
                             }
-                            self._clickNode.setContent(Y.Escape.html(value));
                             _panel.hide();
                         }
                     },
@@ -292,7 +285,7 @@ YUI.add("editable", function (Y) {
         /**
          * Move the panel to correct position and show.
          *
-         * @method _handleClick
+         * @event _handleClick
          * @private
          * @param e {Y.Event} The YUI Event instance.
          */
@@ -300,11 +293,17 @@ YUI.add("editable", function (Y) {
             Y.log("_handleClick(e) is executed.", "info", MODULE_ID);
             var self = this,
                 clickNode,
+                clickText,
                 panelNode,
                 inputNode;
 
             panelNode = _panel.get("srcNode");
             clickNode = e.currentTarget;
+
+            // Update UI if necessary.
+            if (!clickNode.hasClass(CLICKED_CLASS_NAME)) {
+                self._uiSetNode(clickNode);
+            }
 
             // Update the submit event.
             _panel.set("buttons", {
@@ -332,14 +331,23 @@ YUI.add("editable", function (Y) {
             // Update input node.
             fieldName = self.get("postField");
             fieldName = (fieldName) ? ' name="' + fieldName + '"' : "";
+            clickText = clickNode.one("." + VALUE_CLASS_NAME).getContent();
             if (self.get("inputType") === "input") {
-                bodyContent = '<input type="text"' + fieldName + ' class="' + INPUT_CLASS_NAME + '">';
+                bodyContent = [
+                    '<input type="text"' + fieldName,
+                    ' class="' + INPUT_CLASS_NAME + '"',
+                    ' value="' + clickText + '">'
+                ].join("");
             } else {
-                bodyContent = '<textarea' + fieldName + ' class="' + INPUT_CLASS_NAME + '"></textarea>';
+                bodyContent = [
+                    '<textarea' + fieldName,
+                    ' class="' + INPUT_CLASS_NAME + '"',
+                    '>' + clickText + '</textarea>'
+                ].join("");
             }
             _panel.set("bodyContent", bodyContent);
+
             inputNode = panelNode.one(INPUT_SELECTOR);
-            inputNode.set("value", clickNode.get("innerText"));
 
             self._clickNode = clickNode;
             self._inputNode = inputNode;
@@ -347,32 +355,100 @@ YUI.add("editable", function (Y) {
             // Adjust panel position.
             self._uiSetPosition(inputNode, panelNode, clickNode);
 
-            self._activeValue = clickNode.get("innerText");
-
             // Show the panel for editing.
             _panel.show();
+
+            inputNode.select();
+            inputNode.focus();
+            self._activeValue = clickNode.one("." + VALUE_CLASS_NAME).getContent();
+
+        },
+        //=====================
+        // Private Methods
+        //=====================
+        /**
+         * All buttons in panel footer will be disabled.
+         * It prevents duplicate form submission.
+         *
+         * @event _lock
+         * @private
+         */
+        _lock: function () {
+            Y.log("_lock() is executed.", "info", MODULE_ID);
+            var self = this;
+            Y.each(_panel.get("buttons.footer"), function (button) {
+                button.set("disabled", true);
+            });
         },
         /**
-         * It will be invoked after user instanitate a instance.
+         * Remove disable attribute for panel footer buttons.
          *
-         * @method initializer
-         * @public
+         * @event _unlock
+         * @private
          */
-        initializer: function (config) {
-            Y.log("initializer() is executed.", "info", MODULE_ID);
-            var self = this,
-                node,
-                handler;
-
-            if (!_panel) {
-                _panel = _initPanel();
-            }
-
-            // Use event delegation to prevent too many editable node exists.
-            node = Y.one(self.get("node"));
-            handler = node.delegate("click", self._handleClick, CLICK_SELECTOR, self);
-            self._handlers.push(handler);
+        _unlock: function () {
+            Y.log("_unlock() is executed.", "info", MODULE_ID);
+            var self = this;
+            Y.each(_panel.get("buttons.footer"), function (button) {
+                button.set("disabled", false);
+            });
         },
+        /**
+         * Render the node that triggers editable panel.
+         *
+         * @method _uiSetNode
+         * @private
+         * @param node {Y.Node} The clicked node.
+         */
+        _uiSetNode: function (node) {
+            Y.log("_uiSetNode() is executed.", "info", MODULE_ID);
+            if (node.hasClass(CLASS_NAME)) {
+                node.addClass(CLASS_NAME);
+            }
+            if (node.hasClass(CLICKED_CLASS_NAME)) {
+                return;
+            }
+            var empty, text;
+            node.addClass(CLICKED_CLASS_NAME);
+            if (!node.one("." + VALUE_CLASS_NAME)) {
+                text = node.get("innerText") || node.get("textContent");
+                node.setContent("");
+                node.append('<div class="' + VALUE_CLASS_NAME + '">' + text + '</div>');
+            }
+            if (!node.one("." + HINT_CLASS_NAME)) {
+                empty = this.get("emptyDefault"), // The default empty text.
+                node.append('<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>');
+            }
+        },
+        /**
+         * Set the position for panel editor.
+         *
+         * @method _uiSetPosition
+         * @param inputNode {Y.Node} The input node.
+         * @param panelNode {Y.Node} The panel node.
+         * @param clickNode {Y.Node} The editable node.
+         */
+        _uiSetPosition: function (inputNode, panelNode, clickNode) {
+            Y.log("_uiSetPosition() is executed.", "info", MODULE_ID);
+            var clickXY  = clickNode.getXY(),
+                dialogXY = panelNode.getXY(),
+                inputXY  = inputNode.getXY(),
+                padX     = 18, // TODO - padX and padY should be dynamic.
+                padY     = 15;
+
+            inputNode.setStyles({
+                "width" : clickNode.get("offsetWidth"),
+                "height": clickNode.get("offsetHeight")
+            });
+
+            _panel.set("xy", [
+                clickXY[0] - (inputXY[0] - dialogXY[0]) - padX,
+                clickXY[1] - (inputXY[1] - dialogXY[1]) - padY
+            ]);
+        },
+        //=====================
+        // Public Methods
+        //=====================
         /**
          * It will be invoked after user calls destroy().
          *
@@ -398,6 +474,39 @@ YUI.add("editable", function (Y) {
                 return;
             }
             _panel.hide();
+        },
+        /**
+         * It will be invoked after user instanitate a instance.
+         *
+         * @method initializer
+         * @public
+         */
+        initializer: function (config) {
+            Y.log("initializer() is executed.", "info", MODULE_ID);
+            var self = this,
+                selector,
+                node,
+                handler;
+
+            selector = config.selector || CLICK_SELECTOR;
+            self._set("selector", selector);
+
+            node = config.node || "body";
+            node = Y.one(node);
+            if (!node) {
+                Y.log("initializer() - The 'node' attribute you provide is not valid.", "error", MODULE_ID);
+                return;
+            }
+            self._set("node", node);
+
+            if (!_panel) {
+                _panel = _initPanel();
+            }
+
+            // Use event delegation to prevent too many editable node exists.
+            node = Y.one(self.get("node"));
+            handler = node.delegate("click", self._handleClick, selector, self);
+            self._handlers.push(handler);
         }
     });
 

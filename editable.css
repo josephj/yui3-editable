@@ -19,6 +19,7 @@
     display: block;
     margin: 5px auto;
     padding: 5px;
+    min-width: 100px;
 }
 .yui3-editable-dialog .yui3-editable-dialog-link {
     color: #099;

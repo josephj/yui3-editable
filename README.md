@@ -73,6 +73,7 @@ YUI().use("editable", function () {
         }
     });
 });
+```
 
 ### Sample Code
 

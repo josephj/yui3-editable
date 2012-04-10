@@ -118,6 +118,14 @@ YUI.add("editable", function (Y) {
             }
 
         },
+        /**
+         * The default empty string
+         * if the HTML is not defined.
+         *
+         * @attribute emptyDefault
+         * @type {String}
+         * @default "Please input your text..."
+         */
         "emptyDefault": {
             value: "Please input your text...",
             validator: Y.Lang.isString
@@ -187,8 +195,23 @@ YUI.add("editable", function (Y) {
         "postField": {
             value: null
         },
+        /**
+         * The CSS selector of editable nodes.
+         *
+         * @attribute selector
+         * @type {String}
+         */
         "selector": {
             value: null
+        },
+        /**
+         * The tooltip which shows when mouse hover the editable nodes.
+         *
+         * @attribute tooltip
+         * @type {String}
+         */
+        "tooltip": {
+            value: "Click here to edit..."
         }
     };
 
@@ -366,6 +389,24 @@ YUI.add("editable", function (Y) {
             self._activeValue = clickNode.one("." + VALUE_CLASS_NAME).getContent();
 
         },
+        /**
+         * Set title as tooltip.
+         *
+         * @event _handleHover
+         * @private
+         * @param e {Y.Event} The YUI Event instance.
+         */
+        _handleHover: function (e) {
+            Y.log("_handleHover(e) is executed.", "info", MODULE_ID);
+            var node = e.currentTarget;
+            if (!Y.Lang.isUndefined(node.hasTitle)) {
+                return;
+            }
+            if (!node.get("title")) {
+                node.set("title", this.get("tooltip"));
+            }
+            node.hasTitle = true;
+        },
         //=====================
         // Private Methods
         //=====================
@@ -508,6 +549,8 @@ YUI.add("editable", function (Y) {
 
             // Use event delegation to prevent too many editable node exists.
             node = Y.one(self.get("node"));
+            handler = node.delegate("mouseenter", self._handleHover, selector, self);
+            self._handlers.push(handler);
             handler = node.delegate("click", self._handleClick, selector, self);
             self._handlers.push(handler);
         }
@@ -516,4 +559,4 @@ YUI.add("editable", function (Y) {
     // Promote to YUI environment.
     Y.Editable = Editable;
 
-}, "0.0.1", {requires:["base", "panel", "event-delegate", "node-event-delegate", "io-form", "escape"]});
+}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-form", "escape"]});

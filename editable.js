@@ -317,10 +317,12 @@ YUI.add("editable", function (Y) {
             });
 
             // Update input node.
+            fieldName = self.get("postField");
+            fieldName = (fieldName) ? ' name="' + fieldName + '"' : "";
             if (self.get("inputType") === "input") {
-                bodyContent = '<input type="text" name="' + self.get("postField") + '" class="' + INPUT_CLASS_NAME + '">';
+                bodyContent = '<input type="text"' + fieldName + ' class="' + INPUT_CLASS_NAME + '">';
             } else {
-                bodyContent = '<textarea name="' + self.get("postField") + '"  class="' + INPUT_CLASS_NAME + '"></textarea>';
+                bodyContent = '<textarea' + fieldName + ' class="' + INPUT_CLASS_NAME + '"></textarea>';
             }
             _panel.set("bodyContent", bodyContent);
             inputNode = panelNode.one(INPUT_SELECTOR);

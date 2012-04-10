@@ -51,6 +51,19 @@ YUI.add("editable", function (Y) {
 
     /**
      * A widget that makes a node's content editable.
+     * The following is sample usage.
+     *
+     *    var editable = new Y.Editable({
+     *        "node": "#foo",          // The context node.
+     *        "inputType": "textarea", // The input field type.
+     *        "postUrl": "api.php",    // The entrypoint of your request.
+     *        "postValidator": function (response) {
+     *            // Define your validator here.
+     *            // The parameter is Y.io response object.
+     *            // Return true if the response is successful.
+     *        }
+     *    });
+     *
      *
      * @constructor
      * @class Editable

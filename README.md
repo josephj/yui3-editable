@@ -10,14 +10,6 @@ You must embed YUI seed file in your web page.
 <script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
 ```
 
-## Editable JavaScript Library
-
-Make a copy of editable.js to your website and embed it in your web page too.
-
-```html
-<script src="editable.js"></script>
-```
-
 ## HTML
 
 Suppose you have following HTML code:
@@ -48,7 +40,25 @@ Say, you want to make all nodes with 'nickname-editable' class name become edita
 Only with few lines, you can achieve it.
 
 ```javascript
-YUI().use("editable", function () {
+YUI({
+    lang: "zh-TW",
+    groups: {
+        mui: {
+            base: "http://a.mimgs.com/lib/mui/",
+            modules: {
+                "editable": {
+                    path: "editable/editable.js",
+                    lang: ["en-US", "zh-TW"],
+                    requires: ["editable-css"]
+                },
+                "editable-css": {
+                    path: "editable/assets/editable.css",
+                    type: "css"
+                }
+            }
+        }
+    }
+}).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector": ".nickname-editable"
     });
@@ -61,7 +71,24 @@ The above example only works in browser-side.
 You must want to know how to save your data to your web server.
 
 ```javascript
-YUI().use("editable", function () {
+YUI({
+    lang: "zh-TW",
+    groups: {
+        mui: {
+            base: "http://a.mimgs.com/lib/mui/",
+            modules: {
+                "editable": {
+                    path: "editable/editable.js",
+                    lang: ["en-US", "zh-TW"]
+                },
+                "editable-css": {
+                    path: "editable/assets/editable.css",
+                    type: "css"
+                }
+            }
+        }
+    }
+}).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector"     : ".nickname-editable"
         "postData"     : "crumb=a12345",      // Extra data you want send to server.

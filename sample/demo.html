@@ -5,9 +5,7 @@
 <title>Editable 2</title>
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
-<link rel="stylesheet" href="../assets/editable.css">
-<script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
-<script src="../editable.js"></script>
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
 <style>
 #foo,
 #bar {
@@ -100,12 +98,30 @@
     </div>
 
     <script>
-    YUI({fetchCSS:false}).use("editable", function (Y) {
+    YUI({
+        lang: "zh-TW",
+        groups: {
+            mui: {
+                base: "http://josephj.com/lab/2012/yui3-",
+                modules: {
+                    "editable": {
+                        fullpath: "http://josephj.com/lab/2012/yui3-editable/editable.js",
+                        lang: ["en-US", "zh-TW"],
+                        requires: ["editable-css"]
+                    },
+                    "editable-css": {
+                        fullpath: "http://josephj.com/lab/2012/yui3-editable/assets/editable.css",
+                        type: "css"
+                    }
+                }
+            }
+        }
+    }).use("editable", function (Y) {
         new Y.Editable({"node": "#foo"});
         new Y.Editable({
             "node": "#bar",
             "inputType": "textarea",
-            "postUrl": "ajax.txt",
+            "postUrl": "ajax.php?" + parseInt(new Date().getTime()),
             "postValidator": function (o) {
                 var data = eval("(" + o.responseText + ")");
                 return (data.response === "ok");

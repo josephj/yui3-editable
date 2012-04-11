@@ -596,4 +596,4 @@ YUI.add("editable", function (Y) {
     // Promote to YUI environment.
     Y.Editable = Editable;
 
-}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-base", "escape", "intl"]});
+}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-base", "escape", "intl", "editable-css"]});

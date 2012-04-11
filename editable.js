@@ -10,6 +10,7 @@
 YUI.add("editable", function (Y) {
 
     var _panel = null, // The single Y.Panel instance for all editable instances.
+        _lang,
         //=============
         // Constants
         //=============
@@ -29,6 +30,12 @@ YUI.add("editable", function (Y) {
         _documentClick,
         _initPanel;
 
+    _lang = Y.Intl.get("editable");
+    if (!_lang) {
+        Y.log("You have to specify language packs in YUI config.", "error", MODULE_ID);
+        return;
+    }
+
     /**
      * Render global panel.
      *
@@ -41,7 +48,7 @@ YUI.add("editable", function (Y) {
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
             contentBox: Y.Node.create('<form class="' + CLASS_NAME + '-dialog-content"/>'),
             constrain: "body",
-            headerContent: "Edit",
+            headerContent: _lang.header_prompt,
             visible: false,
             render: true
         });
@@ -100,7 +107,6 @@ YUI.add("editable", function (Y) {
      * @param {Object} config attribute object
      */
     function Editable (config) {
-        this.lang = Y.Intl.get("editable");
         Editable.superclass.constructor.apply(this, arguments);
     }
 
@@ -137,7 +143,9 @@ YUI.add("editable", function (Y) {
          * @default "Please input your text..."
          */
         "emptyDefault": {
-            value: "Please input your text...",
+            valueFn: function () {
+                return _lang.default_empty_hint;
+            },
             validator: Y.Lang.isString
         },
         /**
@@ -148,7 +156,9 @@ YUI.add("editable", function (Y) {
          * @default "Something wrong, please try again."
          */
         "errorMessage": {
-            value: "Something wrong, please try again.",
+            valueFn: function () {
+                return _lang.default_error_message;
+            },
             validator: Y.Lang.isString
         },
         /**
@@ -232,7 +242,9 @@ YUI.add("editable", function (Y) {
          * @type {String}
          */
         "tooltip": {
-            value: "Click here to edit..."
+            valueFn: function () {
+                return _lang.default_tooltip;
+            }
         }
     };
 
@@ -358,14 +370,14 @@ YUI.add("editable", function (Y) {
             _panel.set("buttons", {
                 footer: [
                     {
-                        label    : "Save",
+                        label    : _lang.save_label,
                         isDefault: true,
                         events: {
                             click: Y.bind(self._handleSubmit, self)
                         }
                     },
                     {
-                        label    : "Cancel",
+                        label    : _lang.cancel_label,
                         hasFocus : false,
                         events: {
                             click: function (e) {

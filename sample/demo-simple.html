@@ -5,9 +5,7 @@
 <title>Y.Editable Prototype</title>
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
-<link href="../assets/editable.css" rel="stylesheet">
-<script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
-<script src="../editable.js"></script>
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
 <style>
 ul {
     width: 200px;
@@ -31,7 +29,25 @@ ul {
         </li>
     </ul>
     <script>
-    YUI({fetchCSS: false}).use("editable", function (Y) {
+    YUI({
+        lang: "zh-TW",
+        groups: {
+            mui: {
+                base: "http://a.mimgs.com/lib/mui/",
+                modules: {
+                    "editable": {
+                        path: "editable/editable.js",
+                        lang: ["en-US", "zh-TW"],
+                        requires: ["editable-css"]
+                    },
+                    "editable-css": {
+                        path: "editable/assets/editable.css",
+                        type: "css"
+                    }
+                }
+            }
+        }
+    }).use("editable", function (Y) {
         var editable = new Y.Editable({
             "selector": ".nickname-editable"
         });

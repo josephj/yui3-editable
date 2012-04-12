@@ -7,28 +7,53 @@
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
 <script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
 <style>
-#foo,
+#photos,
 #bar {
-    padding: 20px;
     margin: 20px;
     border: solid 1px #eee;
     zoom: 1;
 }
-#foo:after,
+#photos:after,
 #bar:after {
     content: "";
     display: block;
     clear:both;
 }
-#foo .item {
-    width: 250px; height: 250px;
-    background: yellow;
-    margin: 0 10px 10px 0;
-    float: left;
+#photos {
+    position: relative;
+    z-index: 0;
 }
-#foo .yui3-editable {
-    background: pink;
-    cursor: text;
+#photos .item {
+    height: 240px;
+    border: solid 1px #ccc;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    margin: 0 5px 5px 0;
+    width: 240px;
+}
+#photos .item .info {
+    background: #000;
+    opacity: 0.7;
+    height: 48px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+#photos .item .info .title {
+    color: #fff;
+    height: 20px;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 123.1%;
+}
+#photos .item .info .date {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 0 5px 5px;
+
 }
 #bar .item {
     background: #ccc;
@@ -45,36 +70,27 @@
 </head>
 <body>
 
-
-    <div id="foo">
+    <div id="photos">
         <div class="item">
-            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class="yui3-editable">
-                <div class="yui3-editable-value">Marco Ma</div>
-                <div class="yui3-editable-hint">請輸入內容</div>
+            <img src="photo-1.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title">My Family</div>
+                <div class="date">2010/11/21</div>
             </div>
         </div>
         <div class="item">
-            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class="yui3-editable yui3-editable-empty">
-                <div class="yui3-editable-value"></div>
-                <div class="yui3-editable-hint">請輸入內容</div>
+            <img src="photo-2.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title"></div>
+                <div class="date">2010/11/21</div>
             </div>
         </div>
         <div class="item">
-            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class="yui3-editable">Jonas Chan</div>
-        </div>
-        <div class="item">
-            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class="yui3-editable yui3-editable-empty">
-                <div class="yui3-editable-value"></div>
-                <div class="yui3-editable-hint">Please input user's nickname.</div>
+            <img src="photo-3.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title">2012 Birthday Party</div>
+                <div class="date">2010/11/21</div>
             </div>
-        </div>
-        <div class="item">
-            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class="yui3-editable">hi</div>
         </div>
     </div>
 
@@ -117,7 +133,7 @@
             }
         }
     }).use("editable", function (Y) {
-        new Y.Editable({"node": "#foo"});
+        new Y.Editable({"selector": ".title", node: "#photos"});
         new Y.Editable({
             "node": "#bar",
             "inputType": "textarea",

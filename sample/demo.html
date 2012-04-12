@@ -10,7 +10,6 @@
 #photos,
 #bar {
     margin: 20px;
-    border: solid 1px #eee;
     zoom: 1;
 }
 #photos:after,
@@ -25,7 +24,6 @@
 }
 #photos .item {
     height: 240px;
-    border: solid 1px #ccc;
     float: left;
     overflow: hidden;
     position: relative;
@@ -121,19 +119,23 @@
                 base: "http://josephj.com/lab/2012/yui3-",
                 modules: {
                     "editable": {
-                        fullpath: "http://josephj.com/lab/2012/yui3-editable/editable.js",
+                        fullpath: "http://localhost/editable/editable.js",
                         lang: ["en-US", "zh-TW"],
                         requires: ["editable-css"]
                     },
                     "editable-css": {
-                        fullpath: "http://josephj.com/lab/2012/yui3-editable/assets/editable.css",
+                        fullpath: "http://localhost/editable/assets/editable.css",
                         type: "css"
                     }
                 }
             }
         }
     }).use("editable", function (Y) {
+
+        // Instance 1
         new Y.Editable({"selector": ".title", node: "#photos"});
+
+        // Instance 2
         new Y.Editable({
             "node": "#bar",
             "inputType": "textarea",

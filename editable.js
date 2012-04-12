@@ -436,14 +436,21 @@ YUI.add("editable", function (Y) {
          */
         _handleHover: function (e) {
             Y.log("_handleHover(e) is executed.", "info", MODULE_ID);
-            var node = e.currentTarget;
+            var self = this,
+                node = e.currentTarget;
             if (!Y.Lang.isUndefined(node.hasTitle)) {
                 return;
             }
             if (!node.get("title")) {
-                node.set("title", this.get("tooltip"));
+                node.set("title", self.get("tooltip"));
             }
             node.hasTitle = true;
+
+            // Update UI if necessary.
+            // TODO - Confirm if I should do this.
+            /*if (!node.hasClass(CLICKED_CLASS_NAME)) {
+                self._uiSetNode(node);
+            }*/
         },
         //=====================
         // Private Methods
@@ -490,17 +497,20 @@ YUI.add("editable", function (Y) {
             if (node.hasClass(CLICKED_CLASS_NAME)) {
                 return;
             }
-            var empty, text;
+            var empty, text, html;
             node.addClass(CLICKED_CLASS_NAME);
             if (!node.one("." + VALUE_CLASS_NAME)) {
                 text = node.get("innerText") || node.get("textContent");
                 node.setContent("");
                 node.append('<div class="' + VALUE_CLASS_NAME + '">' + text + '</div>');
+                if (!Y.Lang.trim(text)) {
+                    node.addClass(EMPTY_CLASS_NAME);
+                }
             }
             if (!node.one("." + HINT_CLASS_NAME)) {
                 empty = this.get("emptyDefault");
                 html = '<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>';
-                node.append('<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>');
+                node.append(html);
             }
         },
         /**

@@ -50,7 +50,8 @@ YUI.add("editable", function (Y) {
             constrain: "body",
             headerContent: _lang.header_prompt,
             visible: false,
-            render: true
+            render: true,
+            zIndex: 1
         });
         // FIXME - button disappear after _uiSetPosition.
         panel.addButton({
@@ -483,7 +484,7 @@ YUI.add("editable", function (Y) {
          */
         _uiSetNode: function (node) {
             Y.log("_uiSetNode() is executed.", "info", MODULE_ID);
-            if (node.hasClass(CLASS_NAME)) {
+            if (!node.hasClass(CLASS_NAME)) {
                 node.addClass(CLASS_NAME);
             }
             if (node.hasClass(CLICKED_CLASS_NAME)) {
@@ -497,7 +498,8 @@ YUI.add("editable", function (Y) {
                 node.append('<div class="' + VALUE_CLASS_NAME + '">' + text + '</div>');
             }
             if (!node.one("." + HINT_CLASS_NAME)) {
-                empty = this.get("emptyDefault"); // The default empty text.
+                empty = this.get("emptyDefault");
+                html = '<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>';
                 node.append('<div class="' + HINT_CLASS_NAME + '">' + empty  + '</div>');
             }
         },

@@ -4,10 +4,12 @@ A JavaScript widget that makes a node content editable.
 
 ## Dependencies
 
-You must embed YUI seed file in your web page.
+You must embed YUI seed file, editable library, and editable CSS in your web page.
 
 ```html
-<script src="http://yui.yahooapis.com/3.5.0pr6/build/yui/yui-min.js"></script>
+<link rel="stylesheet" href="assets/editable.css">
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
+<script src="editable.js"></script>
 ```
 
 ## HTML
@@ -44,20 +46,19 @@ YUI({
     lang: "zh-TW",
     groups: {
         mui: {
-            base: "http://a.mimgs.com/lib/mui/",
+            base: "http://josephj.com/project/", 
             modules: {
                 "editable": {
-                    path: "editable/editable.js",
-                    lang: ["en-US", "zh-TW"],
-                    requires: ["editable-css"]
-                },
-                "editable-css": {
-                    path: "editable/assets/editable.css",
-                    type: "css"
+                    lang: ["en-US"],
+                    requires: [
+                        "base", "panel", "event-mouseenter",
+                        "event-delegate", "node-event-delegate",
+                        "io-base", "escape", "intl"
+                    ]
                 }
             }
         }
-    }
+    }        
 }).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector": ".nickname-editable"
@@ -91,6 +92,7 @@ YUI({
 }).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector"     : ".nickname-editable"
+        "validateRule" : "required|max_length[25]",
         "postData"     : "crumb=a12345",      // Extra data you want send to server.
         "postField"    : "nickname",          // The input field name.
         "postUrl"      : "/service/api.php",  // The server's API entrypoint.

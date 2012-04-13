@@ -1,6 +1,4 @@
 /*global YUI */
-// 定位速度如何更快
-// 多國語系
 /**
  * A widget that makes a node's content editable.
  *
@@ -28,13 +26,36 @@ YUI.add("editable", function (Y) {
         // Private Function
         //==================
         _documentClick,
-        _initPanel;
+        _initPanel,
+        _setCursorToEnd;
 
     _lang = Y.Intl.get("editable");
     if (!_lang) {
         Y.log("You have to specify language packs in YUI config.", "error", MODULE_ID);
         return;
     }
+
+    /**
+     * Move the cursor to the end of text.
+     *
+     * @method _setCursorToEnd
+
+     */
+    _setCursorToEnd = function (node) {
+        var el, range, length;
+        el = node._node;
+        if (el.createTextRange) {
+            range = el.createTextRange();
+            range.moveStart("character", el.value.length);
+            range.collapse();
+            range.select();
+        } else {
+            //Firefox and Opera
+           el.focus();
+           length = el.value.length;
+           el.setSelectionRange(length, length);
+        }
+   }
 
     /**
      * Render global panel.
@@ -133,7 +154,6 @@ YUI.add("editable", function (Y) {
             validator: function (value) {
                 return (value === "hover" || value === "click");
             }
-
         },
         /**
          * The default empty string
@@ -246,6 +266,9 @@ YUI.add("editable", function (Y) {
             valueFn: function () {
                 return _lang.default_tooltip;
             }
+        },
+        "validateRule": {
+            value: null
         }
     };
 
@@ -271,12 +294,73 @@ YUI.add("editable", function (Y) {
             Y.log("_handleSubmit(e) is executed.", "info", MODULE_ID);
             var self = this,
                 clickNode = null,
+                messageNode = null,
+                pattern = null,
+                matches = [],
+                rules = [],
                 value = "",
-                url;
+                url,
+                i, j;
 
             e.preventDefault();
             url = self.get("postUrl");
             value = self._inputNode.get("value");
+
+            // Client-side form validation.
+            if (self.get("validateRule")) {
+                messageNode = _panel.get("srcNode").one("." + MESSAGE_CLASS_NAME);
+                rules = self.get("validateRule").split("|");
+                value = Y.Lang.trim(value);
+                for (i = 0, j = rules.length; i < j; i++) {
+                    rule = rules[i];
+
+                    // "required"
+                    if (rule === "required") {
+                        if (!value) {
+                            Y.log("_handleSubmit(): Can't be empty.", "warn", MODULE_ID);
+                            messageNode.setContent(_lang.require_error_message);
+                            return;
+                        }
+                    }
+
+                    // "max-length[\d]"
+                    pattern = /max_length\[(\d+)\]/;
+                    matches = rule.match(pattern);
+                    if (matches) {
+                        if (parseInt(matches[1], 10) < value.length) {
+                            Y.log("_handleSubmit(): Exceeds max length.", "warn", MODULE_ID);
+                            messageNode.setContent(_lang.max_length_error_message);
+                            return;
+                        }
+                    }
+
+                    // "min-length[\d]"
+                    pattern = /min_length\[(\d+)\]/;
+                    matches = rule.match(pattern);
+                    if (matches) {
+                        if (parseInt(matches[1], 10) > value.length) {
+                            Y.log("_handleSubmit(): Less than min length.", "warn", MODULE_ID);
+                            messageNode.setContent(_lang.min_length_error_message);
+                            return;
+                        }
+                    }
+
+                    // "filename"
+                    if (rule === "filename") {
+                        value = value.replace(/[.\s]+$/, "");
+                        self._inputNode.set("value", value);
+                        if (
+                            (/[\\\/:*?\"<>\|]/.test(value)) ||
+                            (value.indexOf(".") === 0) ||
+                            (value.length > 215)
+                        ) {
+                            Y.log("_handleSubmit(): File name is illegal.", "warn", MODULE_ID);
+                            messageNode.setContent(_lang.filename_error_message);
+                            return;
+                        }
+                    }
+                }
+            }
 
             if (self._activeValue === value) {
                 Y.log("_handleSubmit(e) - Value not change.", "warn", MODULE_ID);
@@ -411,6 +495,7 @@ YUI.add("editable", function (Y) {
             }
             _panel.set("bodyContent", bodyContent);
 
+
             inputNode = panelNode.one(INPUT_SELECTOR);
 
             self._clickNode = clickNode;
@@ -422,8 +507,8 @@ YUI.add("editable", function (Y) {
             // Show the panel for editing.
             _panel.show();
 
-            inputNode.select();
-            inputNode.focus();
+            _setCursorToEnd(inputNode);
+
             self._activeValue = clickNode.one("." + VALUE_CLASS_NAME).getContent();
 
         },
@@ -447,10 +532,9 @@ YUI.add("editable", function (Y) {
             node.hasTitle = true;
 
             // Update UI if necessary.
-            // TODO - Confirm if I should do this.
-            /*if (!node.hasClass(CLICKED_CLASS_NAME)) {
+            if (!node.hasClass(CLICKED_CLASS_NAME)) {
                 self._uiSetNode(node);
-            }*/
+            }
         },
         //=====================
         // Private Methods
@@ -608,4 +692,5 @@ YUI.add("editable", function (Y) {
     // Promote to YUI environment.
     Y.Editable = Editable;
 
-}, "0.0.1", {requires:["base", "panel", "event-mouseenter", "event-delegate", "node-event-delegate", "io-base", "escape", "intl", "editable-css"]});
+// FIXME - requires configuration should be here.
+}, "0.0.1");

@@ -2,10 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Editable 2</title>
+<title>Editable</title>
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../assets/editable.css">
 <script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
+<script src="../editable.js"></script>
 <style>
 #photos,
 #bar {
@@ -113,19 +115,20 @@
 
     <script>
     YUI({
-        lang: "zh-TW",
+        filter: "raw",
+        fetchCSS: false,
+        lang: "zh-TW, en-US",
         groups: {
             mui: {
-                base: "http://josephj.com/lab/2012/yui3-",
+                base: "http://josephj.com/project/",
                 modules: {
                     "editable": {
-                        fullpath: "http://josephj.com/lab/2012/yui3-editable/editable.js",
-                        lang: ["en-US", "zh-TW"],
-                        requires: ["editable-css"]
-                    },
-                    "editable-css": {
-                        fullpath: "http://josephj.com/lab/2012/yui3-editable/assets/editable.css",
-                        type: "css"
+                        lang: ["en-US"],
+                        requires: [
+                            "base", "panel", "event-mouseenter",
+                            "event-delegate", "node-event-delegate",
+                            "io-base", "escape", "intl"
+                        ]
                     }
                 }
             }
@@ -133,7 +136,11 @@
     }).use("editable", function (Y) {
 
         // Instance 1
-        new Y.Editable({"selector": ".title", node: "#photos"});
+        new Y.Editable({
+            "selector": ".title",
+            "node": "#photos",
+            "validateRule": "required|max_length[100]|min_length[2]|filename"
+        });
 
         // Instance 2
         new Y.Editable({

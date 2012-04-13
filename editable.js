@@ -55,7 +55,7 @@ YUI.add("editable", function (Y) {
            length = el.value.length;
            el.setSelectionRange(length, length);
         }
-   }
+   };
 
     /**
      * Render global panel.
@@ -408,6 +408,7 @@ YUI.add("editable", function (Y) {
                 pattern = null,
                 matches = [],
                 rules = [],
+                rule,
                 value = "",
                 url,
                 i, j;

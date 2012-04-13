@@ -16,6 +16,15 @@
     padding: 10px;
     position: absolute;
     @include border-radius(5px);
+    .close-link {
+        background: url(http://a.mimgs.com/index/my/bg_contact_create_group_close.gif);
+        border: none;
+        width: 31px;
+        height: 31px;
+        position: absolute;
+        right: -15px;
+        top: -15px;
+    }
 }
 .yui3-editable-dialog-message {
     color: red;

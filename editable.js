@@ -69,19 +69,20 @@ YUI.add("editable", function (Y) {
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
             contentBox: Y.Node.create('<form class="' + CLASS_NAME + '-dialog-content"/>'),
             constrain: "body",
-            headerContent: _lang.header_prompt,
+            headerContent: [
+                _lang.header_prompt,
+                '<a href="javascript:void(0);" class="close-link">Close</a>'
+            ].join(""),
             visible: false,
             render: true,
             zIndex: 1
         });
-        // FIXME - button disappear after _uiSetPosition.
-        panel.addButton({
-            value: "Close",
-            action: function () {
-                panel.hide();
-            },
-            section: Y.WidgetStdMod.HEADER
-        });
+        panel.set("hideOn", [
+            {
+                node: panel.get("contentBox").one(".close-link"),
+                eventName: "click"
+            }
+        ]);
         Y.one("body").on("click", _documentClick);
         return panel;
     };
@@ -284,6 +285,115 @@ YUI.add("editable", function (Y) {
         // Private Events
         //=====================
         /**
+         * Move the panel to correct position and show.
+         *
+         * @event _handleClick
+         * @private
+         * @param e {Y.Event} The YUI Event instance.
+         */
+        _handleClick: function (e) {
+            Y.log("_handleClick(e) is executed.", "info", MODULE_ID);
+            var self = this,
+                bodyContent,
+                clickNode,
+                clickText,
+                fieldName,
+                panelNode,
+                inputNode;
+
+            panelNode = _panel.get("srcNode");
+            clickNode = e.currentTarget;
+
+            // Update UI if necessary.
+            if (!clickNode.hasClass(CLICKED_CLASS_NAME)) {
+                self._uiSetNode(clickNode);
+            }
+
+            // Update the submit event.
+            _panel.set("buttons", {
+                footer: [
+                    {
+                        label    : _lang.save_label,
+                        isDefault: true,
+                        events: {
+                            click: Y.bind(self._handleSubmit, self)
+                        }
+                    },
+                    {
+                        label    : _lang.cancel_label,
+                        hasFocus : false,
+                        events: {
+                            click: function (e) {
+                                e.preventDefault();
+                                this.hide();
+                            }
+                        }
+                    }
+                ]
+            });
+
+            // Update input node.
+            fieldName = self.get("postField");
+            fieldName = (fieldName) ? ' name="' + fieldName + '"' : "";
+            clickText = clickNode.one("." + VALUE_CLASS_NAME).getContent();
+            if (self.get("inputType") === "input") {
+                bodyContent = [
+                    '<input type="text"' + fieldName,
+                    ' class="' + INPUT_CLASS_NAME + '"',
+                    ' value="' + clickText + '">',
+                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
+                ].join("");
+            } else {
+                bodyContent = [
+                    '<textarea' + fieldName,
+                    ' class="' + INPUT_CLASS_NAME + '"',
+                    '>' + clickText + '</textarea>',
+                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
+                ].join("");
+            }
+            _panel.set("bodyContent", bodyContent);
+
+            inputNode = panelNode.one(INPUT_SELECTOR);
+
+            self._clickNode = clickNode;
+            self._inputNode = inputNode;
+
+            // Adjust panel position.
+            self._uiSetPosition(inputNode, panelNode, clickNode);
+
+            // Show the panel for editing.
+            _panel.show();
+
+            _setCursorToEnd(inputNode);
+
+            self._activeValue = clickNode.one("." + VALUE_CLASS_NAME).getContent();
+
+        },
+        /**
+         * Set title as tooltip.
+         *
+         * @event _handleHover
+         * @private
+         * @param e {Y.Event} The YUI Event instance.
+         */
+        _handleHover: function (e) {
+            Y.log("_handleHover(e) is executed.", "info", MODULE_ID);
+            var self = this,
+                node = e.currentTarget;
+            if (!Y.Lang.isUndefined(node.hasTitle)) {
+                return;
+            }
+            if (!node.get("title")) {
+                node.set("title", self.get("tooltip"));
+            }
+            node.hasTitle = true;
+
+            // Update UI if necessary.
+            if (!node.hasClass(CLICKED_CLASS_NAME)) {
+                self._uiSetNode(node);
+            }
+        },
+        /**
          * Handle form submission.
          *
          * @event _handleSubmit
@@ -425,116 +535,6 @@ YUI.add("editable", function (Y) {
                     }
                 }
             });
-        },
-        /**
-         * Move the panel to correct position and show.
-         *
-         * @event _handleClick
-         * @private
-         * @param e {Y.Event} The YUI Event instance.
-         */
-        _handleClick: function (e) {
-            Y.log("_handleClick(e) is executed.", "info", MODULE_ID);
-            var self = this,
-                bodyContent,
-                clickNode,
-                clickText,
-                fieldName,
-                panelNode,
-                inputNode;
-
-            panelNode = _panel.get("srcNode");
-            clickNode = e.currentTarget;
-
-            // Update UI if necessary.
-            if (!clickNode.hasClass(CLICKED_CLASS_NAME)) {
-                self._uiSetNode(clickNode);
-            }
-
-            // Update the submit event.
-            _panel.set("buttons", {
-                footer: [
-                    {
-                        label    : _lang.save_label,
-                        isDefault: true,
-                        events: {
-                            click: Y.bind(self._handleSubmit, self)
-                        }
-                    },
-                    {
-                        label    : _lang.cancel_label,
-                        hasFocus : false,
-                        events: {
-                            click: function (e) {
-                                e.preventDefault();
-                                this.hide();
-                            }
-                        }
-                    }
-                ]
-            });
-
-            // Update input node.
-            fieldName = self.get("postField");
-            fieldName = (fieldName) ? ' name="' + fieldName + '"' : "";
-            clickText = clickNode.one("." + VALUE_CLASS_NAME).getContent();
-            if (self.get("inputType") === "input") {
-                bodyContent = [
-                    '<input type="text"' + fieldName,
-                    ' class="' + INPUT_CLASS_NAME + '"',
-                    ' value="' + clickText + '">',
-                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
-                ].join("");
-            } else {
-                bodyContent = [
-                    '<textarea' + fieldName,
-                    ' class="' + INPUT_CLASS_NAME + '"',
-                    '>' + clickText + '</textarea>',
-                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
-                ].join("");
-            }
-            _panel.set("bodyContent", bodyContent);
-
-
-            inputNode = panelNode.one(INPUT_SELECTOR);
-
-            self._clickNode = clickNode;
-            self._inputNode = inputNode;
-
-            // Adjust panel position.
-            self._uiSetPosition(inputNode, panelNode, clickNode);
-
-            // Show the panel for editing.
-            _panel.show();
-
-            _setCursorToEnd(inputNode);
-
-            self._activeValue = clickNode.one("." + VALUE_CLASS_NAME).getContent();
-
-        },
-        /**
-         * Set title as tooltip.
-         *
-         * @event _handleHover
-         * @private
-         * @param e {Y.Event} The YUI Event instance.
-         */
-        _handleHover: function (e) {
-            Y.log("_handleHover(e) is executed.", "info", MODULE_ID);
-            var self = this,
-                node = e.currentTarget;
-            if (!Y.Lang.isUndefined(node.hasTitle)) {
-                return;
-            }
-            if (!node.get("title")) {
-                node.set("title", self.get("tooltip"));
-            }
-            node.hasTitle = true;
-
-            // Update UI if necessary.
-            if (!node.hasClass(CLICKED_CLASS_NAME)) {
-                self._uiSetNode(node);
-            }
         },
         //=====================
         // Private Methods

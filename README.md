@@ -72,22 +72,22 @@ You must want to know how to save your data to your web server.
 
 ```javascript
 YUI({
-    lang: "zh-TW",
+    lang: "zh-TW, en-US",
     groups: {
         mui: {
-            base: "http://a.mimgs.com/lib/mui/",
+            base: "http://josephj.com/project/", 
             modules: {
                 "editable": {
-                    path: "editable/editable.js",
-                    lang: ["en-US", "zh-TW"]
-                },
-                "editable-css": {
-                    path: "editable/assets/editable.css",
-                    type: "css"
+                    lang: ["en-US"],
+                    requires: [
+                        "base", "panel", "event-mouseenter",
+                        "event-delegate", "node-event-delegate",
+                        "io-base", "escape", "intl"
+                    ]
                 }
             }
         }
-    }
+    }        
 }).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector"     : ".nickname-editable"
@@ -101,6 +101,23 @@ YUI({
     });
 });
 ```
+
+### Attributes
+* emptyDefault: The prompt message that shows when the editable node has no value.
+* inputType: You can choose "input" or "textarea" for users to edit.
+* node: Provide selector, Y.Node, or HTML element here if you don't want this editable instance take effect everywhere in <body>. Default is <body>.
+* postData: Extra form post data in query string style. (a=1&b=2)
+* postUrl: The URL Y.io makes request to.
+* postValidator: A function which validates server response. The only argument is Y.io response object.
+* postField: The name of your input field.
+* errorMessage: The message that shows after postValidator return false.
+* selector: The default is ".yui3-editable". You can specify the selector you want to make these nodes become editable.
+* tooltip: The tooltip which shows when user hovers the editable nodes.
+* validateRule: The built-in form validation rules you want use in this instance, separating by pipe ( | ). Currently I only provide "required", "max_length[]", "min_length[]", and "filename".
+
+### Supported Languages
+* en-US
+* zh-TW
 
 ### Sample Code
 

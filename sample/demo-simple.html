@@ -13,7 +13,7 @@ ul {
 }
 </style>
 </head>
-<body>
+<body class="yui3-skin-sam">
     <ul>
         <li>
             <img src="https://twimg0-a.akamaihd.net/profile_images/1185442680/photo-1_normal.jpeg" alt="David's Buddy Icon">
@@ -30,19 +30,20 @@ ul {
     </ul>
     <script>
     YUI({
-        lang: "zh-TW",
+        filter: "raw",
+        lang: "zh-TW, en-US",
         groups: {
             mui: {
-                base: "http://a.mimgs.com/lib/mui/",
+                filter: "raw",
+                base: "http://josephj.com/project/",
                 modules: {
                     "editable": {
-                        path: "editable/editable.js",
-                        lang: ["en-US", "zh-TW"],
-                        requires: ["editable-css"]
-                    },
-                    "editable-css": {
-                        path: "editable/assets/editable.css",
-                        type: "css"
+                        lang: ["en-US"],
+                        requires: [
+                            "base", "panel", "event-mouseenter",
+                            "event-delegate", "node-event-delegate",
+                            "io-base", "escape", "intl"
+                        ]
                     }
                 }
             }

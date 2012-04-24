@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
 <link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
 <link rel="stylesheet" href="../assets/editable.css">
-<script src="http://a.mimgs.com/lib/yui/3.5.0/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
 <style>
 #photos,
 #bar {
@@ -113,27 +113,18 @@
     </div>
 
     <script>
-    // This configuration will be maintained globally in the future.
-    YUI.GlobalConfig = {
-        combine: true,
-        comboBase: "http://a.mimgs.com/combo/?f=", // Use local combo handler.
-        root: "lib/yui/3.5.0/", // The default root is pointed to YUI 3.5.0 lib.
-        lang: "zh-TW,en-US", // Currently we only provide Chinese and English.
-        filter: { // Change connector for local combo handler.
-            "searchExp": "&",
-            "replaceStr": ","
-        },
-        filters: { //
-            "editable": "raw"
-        },
+    YUI({
+        filter: "raw",
+        fetchCSS: false,
+        lang: "zh-TW, en-US",
         groups: {
-            mui: { // Customized mui modules.
-                combine: true, // Need to specify it again to make combo works.
-                root: "/lib/mui/", // Change to mui lib.
+            mui: {
+                filter: "raw",
+                base: "http://josephj.com/project/",
                 modules: {
                     "editable": {
-                        lang: ["en-US", "zh-TW"],
-                        requires: [ // Dependencies
+                        lang: ["en-US"],
+                        requires: [
                             "base", "panel", "event-mouseenter",
                             "event-delegate", "node-event-delegate",
                             "io-base", "escape", "intl"
@@ -142,10 +133,7 @@
                 }
             }
         }
-    };
-    </script>
-    <script>
-    YUI().use("editable", function (Y) {
+    }).use("editable", function (Y) {
 
         // Instance 1
         new Y.Editable({

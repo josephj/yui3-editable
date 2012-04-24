@@ -1,5 +1,9 @@
 // This configuration will be maintained globally in the future.
 (function () {
+    if (location.host !== "a.mimgs.com") {
+        alert("This sample only works in a.mimgs.com.")
+        return;
+    }
     YUI.GlobalConfig = {
         combine: true,
         comboBase: "http://a.mimgs.com/combo/?f=", // Use local combo handler.

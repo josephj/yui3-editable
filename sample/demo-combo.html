@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Editable</title>
+<link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssreset/reset-min.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css">
+<link rel="stylesheet" href="../assets/editable.css">
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
+<script src="../config.js"></script>
+<style>
+#photos,
+#bar {
+    margin: 20px;
+    zoom: 1;
+}
+#photos:after,
+#bar:after {
+    content: "";
+    display: block;
+    clear:both;
+}
+#photos {
+    position: relative;
+    z-index: 0;
+}
+#photos .item {
+    height: 240px;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    margin: 0 5px 5px 0;
+    width: 240px;
+}
+#photos .item .info {
+    background: #000;
+    opacity: 0.7;
+    height: 48px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+#photos .item .info .title {
+    color: #fff;
+    height: 20px;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 123.1%;
+}
+#photos .item .info .date {
+    color: #ccc;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 0 5px 5px;
+
+}
+#bar .item {
+    background: #ccc;
+    float: left;
+    width: 350px;
+    height: 200px;
+    margin: 0 10px 10px 0;
+}
+#bar .yui3-editable {
+    background: red ;
+    cursor: text;
+}
+</style>
+</head>
+<body>
+
+    <div id="photos">
+        <div class="item">
+            <img src="photo-1.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title">My Family</div>
+                <div class="date">2010/11/21</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="photo-2.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title"></div>
+                <div class="date">2010/11/21</div>
+            </div>
+        </div>
+        <div class="item">
+            <img src="photo-3.jpg" width="240" height="240">
+            <div class="info">
+                <div class="title">2012 Birthday Party</div>
+                <div class="date">2010/11/21</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bar">
+        <div class="item">
+            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="yui3-editable">Click here to edit..  Click here to edit..  Click here to edit..  Click here to edit..  </div>
+        </div>
+        <div class="item">
+            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="yui3-editable">Click here to edit..  Click here to edit..  Click here to edit..  Click here to edit..  </div>
+        </div>
+        <div class="item">
+            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="yui3-editable">Click here to edit..  Click here to edit..  Click here to edit..  Click here to edit..  </div>
+        </div>
+        <div class="item">
+            <p>since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="yui3-editable">Click here to edit..  Click here to edit..  Click here to edit..  Click here to edit..  </div>
+        </div>
+    </div>
+
+    <script>
+    YUI().use("editable", function (Y) {
+
+        // Instance 1
+        new Y.Editable({
+            "selector": ".title",
+            "node": "#photos",
+            "validateRule": "required|max_length[100]|min_length[2]|filename"
+        });
+
+        // Instance 2
+        new Y.Editable({
+            "node": "#bar",
+            "inputType": "textarea",
+            "postUrl": "ajax.php?" + parseInt(new Date().getTime()),
+            "postValidator": function (o) {
+                var data = eval("(" + o.responseText + ")");
+                return (data.response === "ok");
+            }
+        });
+    });
+    </script>
+</body>
+</html>

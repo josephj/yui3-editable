@@ -46,7 +46,7 @@ YUI({
     lang: "zh-TW",
     groups: {
         mui: {
-            base: "http://josephj.com/project/", 
+            base: "http://josephj.com/project/",
             modules: {
                 "editable": {
                     lang: ["en-US"],
@@ -58,7 +58,7 @@ YUI({
                 }
             }
         }
-    }        
+    }
 }).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector": ".nickname-editable"
@@ -76,7 +76,7 @@ YUI({
     lang: "zh-TW, en-US",
     groups: {
         mui: {
-            base: "http://josephj.com/project/", 
+            base: "http://josephj.com/project/",
             modules: {
                 "editable": {
                     lang: ["en-US"],
@@ -88,7 +88,7 @@ YUI({
                 }
             }
         }
-    }        
+    }
 }).use("editable", function (Y) {
     var editable = new Y.Editable({
         "selector"     : ".nickname-editable"
@@ -123,4 +123,5 @@ YUI({
 
 ### Sample Code
 
-* http://josephj.com/project/editable/demo.html
+* http://josephj.com/project/yui3-editable/sample/demo.html
+* http://josephj.com/project/yui3-editable/sample/demo-simple.html

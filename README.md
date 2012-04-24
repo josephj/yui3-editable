@@ -43,9 +43,12 @@ Only with few lines, you can achieve it.
 
 ```javascript
 YUI({
-    lang: "zh-TW",
+    filter: "raw",
+    fetchCSS: false,
+    lang: "zh-TW, en-US",
     groups: {
         mui: {
+            filter: "raw",
             base: "http://josephj.com/project/",
             modules: {
                 "editable": {
@@ -123,5 +126,10 @@ YUI({
 
 ### Sample Code
 
+#### Everybody can access
 * http://josephj.com/project/yui3-editable/sample/demo.html
 * http://josephj.com/project/yui3-editable/sample/demo-simple.html
+
+#### Only miiiCasa Engineer can access
+* http://a.mimgs.com/lib/mui/editable/sample/demo-combo.html
+

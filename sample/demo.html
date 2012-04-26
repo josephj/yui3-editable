@@ -120,14 +120,15 @@
         groups: {
             mui: {
                 filter: "raw",
-                base: "http://josephj.com/project/",
+                //base: "http://josephj.com/project/",
+                base: "http://a.mimgs.com/lib/mui/",
                 modules: {
                     "editable": {
                         lang: ["en-US"],
                         requires: [
                             "base", "panel", "event-mouseenter",
                             "event-delegate", "node-event-delegate",
-                            "io-base", "escape", "intl"
+                            "io-form", "escape", "intl", "json-parse"
                         ]
                     }
                 }
@@ -143,13 +144,36 @@
         });
 
         // Instance 2
-        new Y.Editable({
+        var editable = new Y.Editable({
             "node": "#bar",
             "inputType": "textarea",
             "postUrl": "ajax.php?" + parseInt(new Date().getTime()),
-            "postValidator": function (o) {
-                var data = eval("(" + o.responseText + ")");
-                return (data.response === "ok");
+            "postField": "desc"
+        });
+        editable.set("postConfig", {
+            context: editable,
+            method: "POST",
+            form: {
+                id: editable.get("formNode")
+            },
+            on: {
+                "start": function (id, args) {
+                    Y.log(editable);
+                    this._lock();
+                },
+                "success": function (id, o, args) {
+                    Y.log("_handleSubmit(e) - Server responses data successfully.", "info");
+                    var data = Y.JSON.parse(o.responseText);
+                    if (data.response === "ok") {
+                        this.updateText(this.get("inputValue"));
+                        this.hide();
+                    } else {
+                        this.showMessage("Customized Error Message - Wrong!!!!!")
+                    }
+                },
+                "end": function (id, args) {
+                    this._unlock();
+                }
             }
         });
     });

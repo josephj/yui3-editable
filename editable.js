@@ -171,7 +171,7 @@ YUI.add("editable", function (Y) {
             validator: Y.Lang.isString
         },
         /**
-         * The error message which shows when validating fails.
+         * The global error message which shows when validating fails.
          *
          * @attribute errorMessage
          * @type {String}
@@ -182,6 +182,16 @@ YUI.add("editable", function (Y) {
                 return _lang.default_error_message;
             },
             validator: Y.Lang.isString
+        },
+        /**
+         * The panel form node reference.
+         * You can use it in your customized Y.io configuration.
+         *
+         * @attribute  formNode
+         * @type {Y.Node}
+         */
+        "formNode": {
+            readOnly: true
         },
         /**
          * The form element type for user to input.
@@ -195,6 +205,14 @@ YUI.add("editable", function (Y) {
             validator: function (value) {
                 return (value === "input" || value === "textarea");
             }
+        },
+        /**
+         * The current input value by user.
+         *
+         * @attribute inputValue
+         */
+        "inputValue": {
+            readOnly: true
         },
         /**
          * The context node that editable takes effect within.
@@ -374,6 +392,7 @@ YUI.add("editable", function (Y) {
                 ].join("");
             }
             _panel.set("bodyContent", bodyContent);
+            self._set("inputValue", clickText);
 
             inputNode = panelNode.one(INPUT_SELECTOR);
 
@@ -439,6 +458,7 @@ YUI.add("editable", function (Y) {
             e.preventDefault();
             url = self.get("postUrl");
             value = self._inputNode.get("value");
+            self._set("inputValue", value);
 
             // Client-side form validation.
             if (self.get("validateRule")) {
@@ -519,7 +539,7 @@ YUI.add("editable", function (Y) {
 
             // Otherwise, it uses Y.io() to communicate with server.
             Y.log("_handleSubmit(e) - Exchange data with server.", "info", MODULE_ID);
-            postConfig = postConfig || {
+            postConfig = self.get("postConfig") || {
                 method: "POST",
                 data: self.get("postData"),
                 context: self,
@@ -541,14 +561,7 @@ YUI.add("editable", function (Y) {
                         // and the panel will be hided.
                         if (validator(o)) {
                             Y.log("_handleSubmit(e) - Validation rule passed.", "info", MODULE_ID);
-                            value = Y.Escape.html(value);
-                            value = Y.Lang.trim(value);
-                            clickNode.one("." + VALUE_CLASS_NAME).setContent(value);
-                            if (!value) {
-                                clickNode.addClass(EMPTY_CLASS_NAME);
-                            } else {
-                                clickNode.removeClass(EMPTY_CLASS_NAME);
-                            }
+                            self.updateText(value);
                             _panel.hide();
                         } else {
                             self.showMessage(self.get("errorMessage"));
@@ -559,6 +572,7 @@ YUI.add("editable", function (Y) {
                     }
                 }
             };
+            Y.log(postConfig);
             Y.io(url, postConfig);
         },
         //=====================
@@ -717,12 +731,40 @@ YUI.add("editable", function (Y) {
                 _panel = _initPanel();
             }
 
+            self._set("formNode", _panel.get("contentBox"));
+
             // Use event delegation to prevent too many editable node exists.
             node = Y.one(self.get("node"));
             handler = node.delegate("mouseenter", self._handleHover, selector, self);
             self._handlers.push(handler);
             handler = node.delegate("click", self._handleClick, selector, self);
             self._handlers.push(handler);
+        },
+        /**
+         * Update current text.
+         *
+         * @method updateText
+         * @public
+         * @param text {String} The new text.
+         * @param needEscape {Boolean} Whether the text should be escape.
+         *                             The default value is true.
+         */
+        updateText: function (text, needEscape) {
+            Y.log("updateText() is executed.", "info", MODULE_ID);
+            var self = this,
+                clickNode = self._clickNode;
+            text = text || self.get("inputValue");
+            needEscape = (needEscape === false) ? false : true;
+            if (needEscape) {
+                text = Y.Escape.html(text);
+            }
+            text = Y.Lang.trim(text);
+            clickNode.one("." + VALUE_CLASS_NAME).setContent(text);
+            if (!text) {
+                clickNode.addClass(EMPTY_CLASS_NAME);
+            } else {
+                clickNode.removeClass(EMPTY_CLASS_NAME);
+            }
         }
     });
 

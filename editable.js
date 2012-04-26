@@ -227,6 +227,18 @@ YUI.add("editable", function (Y) {
             value: null
         },
         /**
+         * The configuration for Y.io.
+         * If you set this, postVaidator won't take effect.
+         * You must handle error message and panel visibility by yourself.
+         *
+         * @attribute postConfig
+         * @type {Object}
+         */
+        "postConfig": {
+            value: null,
+            validator: Y.Lang.isObject
+        },
+        /**
          * The server response value must pass
          * this validator to update editable value.
          *
@@ -268,6 +280,16 @@ YUI.add("editable", function (Y) {
                 return _lang.default_tooltip;
             }
         },
+        /**
+         * The form validation rules.
+         * Currently you can only use built-in validators,
+         * including "required", "max-lengh[n]", "min-length[n]", and "filename".
+         * You can use multiple validators by connecting with "|" character.
+         * E.g. "required|filename".
+         *
+         * @attribute validateRule
+         * @type {String}
+         */
         "validateRule": {
             value: null
         }
@@ -496,7 +518,7 @@ YUI.add("editable", function (Y) {
 
             // Otherwise, it uses Y.io() to communicate with server.
             Y.log("_handleSubmit(e) - Exchange data with server.", "info", MODULE_ID);
-            Y.io(url, {
+            postConfig = postConfig || {
                 method: "POST",
                 data: self.get("postData"),
                 context: self,
@@ -528,14 +550,15 @@ YUI.add("editable", function (Y) {
                             }
                             _panel.hide();
                         } else {
-                            _panel.get("srcNode").one("." + MESSAGE_CLASS_NAME).setContent(self.get("errorMessage"));
+                            self.showMessage(self.get("errorMessage"));
                         }
                     },
                     "end": function (id, args) {
                         this._unlock();
                     }
                 }
-            });
+            };
+            Y.io(url, postConfig);
         },
         //=====================
         // Private Methods
@@ -653,6 +676,18 @@ YUI.add("editable", function (Y) {
             }
             _panel.hide();
         },
+        /**
+         * Display error message.
+         *
+         * @method showMessage
+         * @param message {String} The error message you want to display.
+         * @param type {String} The error message type, default is "error".
+         */
+        showMessage: function (message, type) {
+            Y.log("showMessage() is executed.", "info", MODULE_ID);
+            var node = _panel.get("srcNode").one("." + MESSAGE_CLASS_NAME);
+            node.setContent(message);
+        }
         /**
          * It will be invoked after user instanitate a instance.
          *

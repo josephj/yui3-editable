@@ -428,6 +428,7 @@ YUI.add("editable", function (Y) {
                 clickNode = null,
                 messageNode = null,
                 pattern = null,
+                postConfig = {},
                 matches = [],
                 rules = [],
                 rule,
@@ -687,7 +688,7 @@ YUI.add("editable", function (Y) {
             Y.log("showMessage() is executed.", "info", MODULE_ID);
             var node = _panel.get("srcNode").one("." + MESSAGE_CLASS_NAME);
             node.setContent(message);
-        }
+        },
         /**
          * It will be invoked after user instanitate a instance.
          *

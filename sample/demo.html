@@ -120,8 +120,7 @@
         groups: {
             mui: {
                 filter: "raw",
-                //base: "http://josephj.com/project/",
-                base: "http://a.mimgs.com/lib/mui/",
+                base: "http://josephj.com/project/",
                 modules: {
                     "editable": {
                         lang: ["en-US"],
@@ -158,8 +157,7 @@
             },
             on: {
                 "start": function (id, args) {
-                    Y.log(editable);
-                    this._lock();
+                    this.lock();
                 },
                 "success": function (id, o, args) {
                     Y.log("_handleSubmit(e) - Server responses data successfully.", "info");
@@ -172,7 +170,7 @@
                     }
                 },
                 "end": function (id, args) {
-                    this._unlock();
+                    this.unlock();
                 }
             }
         });

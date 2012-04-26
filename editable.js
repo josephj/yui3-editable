@@ -545,7 +545,7 @@ YUI.add("editable", function (Y) {
                 context: self,
                 on: {
                     "start": function (id, args) {
-                        this._lock();
+                        this.lock();
                     },
                     "success": function (id, o, args) {
                         Y.log("_handleSubmit(e) - Server responses data successfully.", "info", MODULE_ID);
@@ -568,11 +568,10 @@ YUI.add("editable", function (Y) {
                         }
                     },
                     "end": function (id, args) {
-                        this._unlock();
+                        this.unlock();
                     }
                 }
             };
-            Y.log(postConfig);
             Y.io(url, postConfig);
         },
         //=====================
@@ -582,11 +581,11 @@ YUI.add("editable", function (Y) {
          * All buttons in panel footer will be disabled.
          * It prevents duplicate form submission.
          *
-         * @event _lock
-         * @private
+         * @event lock
+         * @public
          */
-        _lock: function () {
-            Y.log("_lock() is executed.", "info", MODULE_ID);
+        lock: function () {
+            Y.log("lock() is executed.", "info", MODULE_ID);
             var self = this;
             Y.each(_panel.get("buttons.footer"), function (button) {
                 button.set("disabled", true);
@@ -595,11 +594,11 @@ YUI.add("editable", function (Y) {
         /**
          * Remove disable attribute for panel footer buttons.
          *
-         * @event _unlock
-         * @private
+         * @event unlock
+         * @public
          */
-        _unlock: function () {
-            Y.log("_unlock() is executed.", "info", MODULE_ID);
+        unlock: function () {
+            Y.log("unlock() is executed.", "info", MODULE_ID);
             var self = this;
             Y.each(_panel.get("buttons.footer"), function (button) {
                 button.set("disabled", false);

@@ -228,7 +228,7 @@ YUI.add("editable", function (Y) {
          * The query string as POST data.
          * ex. crumb_name=1234&crumb_value=5678
          *
-         * @attribute postUrl
+         * @attribute postData
          * @type {String}
          */
         "postData": {
@@ -521,6 +521,8 @@ YUI.add("editable", function (Y) {
                 _panel.hide();
                 return;
             }
+
+            self.fire("submit", value);
 
             // If the postUrl attribute is not defined,
             // it just copies the user input value to the editable node.

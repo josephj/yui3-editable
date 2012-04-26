@@ -136,24 +136,28 @@
     }).use("editable", function (Y) {
 
         // Instance 1
-        new Y.Editable({
+        var editable1 = new Y.Editable({
             "selector": ".title",
             "node": "#photos",
             "validateRule": "required|max_length[100]|min_length[2]|filename"
         });
+        editable1.on("submit", function (e, value) {
+            Y.log("editable's submit event has been triggered. The value is " + value);
+        });
+
 
         // Instance 2
-        var editable = new Y.Editable({
+        var editable2 = new Y.Editable({
             "node": "#bar",
             "inputType": "textarea",
             "postUrl": "ajax.php?" + parseInt(new Date().getTime()),
             "postField": "desc"
         });
-        editable.set("postConfig", {
-            context: editable,
+        editable2.set("postConfig", {
+            context: editable2,
             method: "POST",
             form: {
-                id: editable.get("formNode")
+                id: editable2.get("formNode")
             },
             on: {
                 "start": function (id, args) {

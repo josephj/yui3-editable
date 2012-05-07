@@ -34,27 +34,9 @@
     border: solid 1px #bbb;
     padding: 30px 10px 35px;
     position: relative;
+    text-align: left;
     @include box-shadow(#bbb 1px 1px 1px);
     @include border-radius(5px);
-    .yui3-button {
-        border: none;
-        background: none;
-        cursor: pointer;
-        color: #099;
-        padding: 0;
-        outline: 0;
-    }
-    .yui3-button-primary {
-        background: #666;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        font-weight: bold;
-        margin-right: 5px;
-        padding: 5px 10px;
-        width: auto;
-        @include border-radius(5px);
-    }
 }
 .yui3-editable-dialog-input {
     border: solid 2px #bbb;
@@ -63,7 +45,7 @@
     font-family: Calibri;
     margin: 5px auto;
     min-width: 100px;
-    padding: 1px 4px 2px;
+    padding: 4px;
     @include border-radius(3px);
     &:focus {
         border-color: #83cdd2;

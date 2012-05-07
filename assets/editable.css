@@ -37,36 +37,16 @@
     border: solid 1px #bbb;
     padding: 30px 10px 35px;
     position: relative;
-    -webkit-box-shadow: #bbbbbb 1px 1px 1px;
+    text-align: left;
     -moz-box-shadow: #bbbbbb 1px 1px 1px;
+    -webkit-box-shadow: #bbbbbb 1px 1px 1px;
+    -o-box-shadow: #bbbbbb 1px 1px 1px;
     box-shadow: #bbbbbb 1px 1px 1px;
-    -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-    border-radius: 5px;
-}
-.yui3-editable-dialog-content .yui3-button {
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: #099;
-    padding: 0;
-    outline: 0;
-}
-.yui3-editable-dialog-content .yui3-button-primary {
-    background: #666;
-    border: none;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-    margin-right: 5px;
-    padding: 5px 10px;
-    width: auto;
     -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
     -o-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -khtml-border-radius: 5px;
     border-radius: 5px;
 }
 
@@ -77,11 +57,12 @@
     font-family: Calibri;
     margin: 5px auto;
     min-width: 100px;
-    padding: 1px 4px 2px;
-    -webkit-border-radius: 3px;
+    padding: 4px;
     -moz-border-radius: 3px;
-    -ms-border-radius: 3px;
+    -webkit-border-radius: 3px;
     -o-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -khtml-border-radius: 3px;
     border-radius: 3px;
 }
 .yui3-editable-dialog-input:focus {

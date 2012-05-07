@@ -350,7 +350,7 @@ YUI.add("editable", function (Y) {
             _panel.set("buttons", {
                 footer: [
                     {
-                        classNames : "yui3-button-form",
+                        classNames : "yui3-button",
                         label      : _lang.save_label,
                         isDefault  : true,
                         events     : {

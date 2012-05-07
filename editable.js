@@ -510,7 +510,7 @@ YUI.add("editable", function (Y) {
                 return;
             }
 
-            self.fire("submit", value);
+            self.fire("submit", {"value": value, "target": self._clickNode});
 
             // If the postUrl attribute is not defined,
             // it just copies the user input value to the editable node.

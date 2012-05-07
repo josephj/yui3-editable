@@ -8,31 +8,34 @@
 }
 // Same element with .yui3-editable-dialog
 .yui3-panel-hidden {
+    font-family: Calibri;
     visibility: hidden;
 }
 .yui3-editable-dialog {
-    background: #fff;
-    border: solid 1px #ccc;
-    padding: 10px;
     position: absolute;
-    @include border-radius(5px);
     .close-link {
-        background: url(http://a.mimgs.com/index/my/bg_contact_create_group_close.gif);
+        background: url(http://a.mimgs.com/index/common/btn_close.png) 0 0 no-repeat;
         border: none;
-        width: 31px;
-        height: 31px;
+        width: 11px;
+        height: 11px;
         position: absolute;
-        right: -15px;
-        top: -15px;
+        right: 8px;
+        text-decoration: none;
+        top: 8px;
     }
 }
 .yui3-editable-dialog-message {
     color: red;
-    padding-bottom: 3px;
+    padding: 0 0 3px;
     font-size: 93%;
 }
 .yui3-editable-dialog-content {
+    background: #fff;
+    border: solid 1px #bbb;
+    padding: 30px 10px 35px;
     position: relative;
+    @include box-shadow(#bbb 1px 1px 1px);
+    @include border-radius(5px);
     .yui3-button {
         border: none;
         background: none;
@@ -42,7 +45,7 @@
         outline: 0;
     }
     .yui3-button-primary {
-        background-color: #666;
+        background: #666;
         border: none;
         color: #fff;
         cursor: pointer;
@@ -54,12 +57,17 @@
     }
 }
 .yui3-editable-dialog-input {
-    background: #eee;
-    border: solid 1px #ccc;
+    border: solid 2px #bbb;
     display: block;
+    font-size:  146.5%;
+    font-family: Calibri;
     margin: 5px auto;
     min-width: 100px;
-    padding: 5px;
+    padding: 1px 4px 2px;
+    @include border-radius(3px);
+    &:focus {
+        border-color: #83cdd2;
+    }
 }
 .yui3-editable-dialog-link {
     color: #099;

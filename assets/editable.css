@@ -8,41 +8,43 @@
 }
 
 .yui3-panel-hidden {
+    font-family: Calibri;
     visibility: hidden;
 }
 
 .yui3-editable-dialog {
-    background: #fff;
-    border: solid 1px #ccc;
-    padding: 10px;
     position: absolute;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -khtml-border-radius: 5px;
-    border-radius: 5px;
 }
-
 .yui3-editable-dialog .close-link {
-    background: url(http://a.mimgs.com/index/my/bg_contact_create_group_close.gif);
+    background: url(http://a.mimgs.com/index/common/btn_close.png) 0 0 no-repeat;
     border: none;
-    text-indent: -1000px;
-    width: 31px;
-    height: 31px;
+    width: 11px;
+    height: 11px;
     position: absolute;
-    right: -15px;
-    top: -15px;
+    right: 8px;
+    text-decoration: none;
+    top: 8px;
 }
 
 .yui3-editable-dialog-message {
     color: red;
-    padding-bottom: 3px;
+    padding: 0 0 3px;
     font-size: 93%;
 }
 
 .yui3-editable-dialog-content {
+    background: #fff;
+    border: solid 1px #bbb;
+    padding: 30px 10px 35px;
     position: relative;
+    -webkit-box-shadow: #bbbbbb 1px 1px 1px;
+    -moz-box-shadow: #bbbbbb 1px 1px 1px;
+    box-shadow: #bbbbbb 1px 1px 1px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    border-radius: 5px;
 }
 .yui3-editable-dialog-content .yui3-button {
     border: none;
@@ -53,7 +55,7 @@
     outline: 0;
 }
 .yui3-editable-dialog-content .yui3-button-primary {
-    background-color: #666;
+    background: #666;
     border: none;
     color: #fff;
     cursor: pointer;
@@ -61,21 +63,29 @@
     margin-right: 5px;
     padding: 5px 10px;
     width: auto;
-    -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    -o-border-radius: 5px;
+    -moz-border-radius: 5px;
     -ms-border-radius: 5px;
-    -khtml-border-radius: 5px;
+    -o-border-radius: 5px;
     border-radius: 5px;
 }
 
 .yui3-editable-dialog-input {
-    background: #eee;
-    border: solid 1px #ccc;
+    border: solid 2px #bbb;
     display: block;
+    font-size: 146.5%;
+    font-family: Calibri;
     margin: 5px auto;
     min-width: 100px;
-    padding: 5px;
+    padding: 1px 4px 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+}
+.yui3-editable-dialog-input:focus {
+    border-color: #83cdd2;
 }
 
 .yui3-editable-dialog-link {

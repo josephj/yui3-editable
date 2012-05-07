@@ -69,10 +69,7 @@ YUI.add("editable", function (Y) {
             boundingBox: Y.Node.create('<div class="' + CLASS_NAME + '-dialog"/>'),
             contentBox: Y.Node.create('<form class="' + CLASS_NAME + '-dialog-content"/>'),
             constrain: "body",
-            headerContent: [
-                _lang.header_prompt,
-                '<a href="javascript:void(0);" class="close-link">Close</a>'
-            ].join(""),
+            headerContent: '<a href="javascript:void(0);" class="close-link">&nbsp;</a>',
             visible: false,
             render: true,
             zIndex: 1
@@ -353,20 +350,11 @@ YUI.add("editable", function (Y) {
             _panel.set("buttons", {
                 footer: [
                     {
-                        label    : _lang.save_label,
-                        isDefault: true,
-                        events: {
+                        classNames : "yui3-button-form",
+                        label      : _lang.save_label,
+                        isDefault  : true,
+                        events     : {
                             click: Y.bind(self._handleSubmit, self)
-                        }
-                    },
-                    {
-                        label    : _lang.cancel_label,
-                        hasFocus : false,
-                        events: {
-                            click: function (e) {
-                                e.preventDefault();
-                                this.hide();
-                            }
                         }
                     }
                 ]
@@ -381,14 +369,14 @@ YUI.add("editable", function (Y) {
                     '<input type="text"' + fieldName,
                     ' class="' + INPUT_CLASS_NAME + '"',
                     ' value="' + clickText + '">',
-                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
+                    '<p class="' + MESSAGE_CLASS_NAME + '"></p>'
                 ].join("");
             } else {
                 bodyContent = [
                     '<textarea' + fieldName,
                     ' class="' + INPUT_CLASS_NAME + '"',
                     '>' + clickText + '</textarea>',
-                    '<p class="' + MESSAGE_CLASS_NAME + '">&nbsp;</p>'
+                    '<p class="' + MESSAGE_CLASS_NAME + '"></p>'
                 ].join("");
             }
             _panel.set("bodyContent", bodyContent);

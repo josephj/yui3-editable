@@ -8,7 +8,6 @@ YUI.add("lang/editable_en-US", function (Y) {
         min_length_error_message: "Your input is less than minimal length.",
         filename_error_message: 'These characters cannot be used: &#92; &#47; &#58; &#42; &#63; &#34; &#60; &#62; &#124;',
         default_tooltip: "Click here to edit...",
-        header_prompt: "Edit",
         save_label: "Save",
         cancel_label: "Cancel"
     });
